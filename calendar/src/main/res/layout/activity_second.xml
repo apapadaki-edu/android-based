@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/second_activity_layout"
+    android:padding="@dimen/activity_margin"
+    tools:context=".SecondActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_label"
+        android:textSize="@dimen/label_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/teal_200"
+        />
+
+    <EditText
+        android:id="@+id/title_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_input_hint"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:layout_gravity="top"
+        android:textSize="@dimen/edit_text_size"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/due_date_title"
+        android:textSize="@dimen/label_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/teal_200"
+        />
+
+    <EditText
+        android:id="@+id/due_date_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/due_date_input_hint"
+        android:inputType="datetime"
+        android:minHeight="48dp"
+        android:layout_gravity="top"
+        android:textSize="@dimen/edit_text_size"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/details_label"
+        android:textSize="@dimen/label_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/teal_200"
+        android:paddingTop="20dp"
+        />
+
+
+    <EditText
+        android:id="@+id/details_input"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:hint="@string/details_input_hint"
+        android:textSize="@dimen/edit_text_size"
+        android:gravity="top"
+        android:layout_weight="2"
+        android:minHeight="48dp"
+        android:inputType="textMultiLine"
+        android:scrollHorizontally="false"
+        />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        app:justifyContent="space_around">
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/save_button"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="5dp"
+            />
+
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/delete_button"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="1dp"
+            />
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/cancel_button"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="1dp"
+            />
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</LinearLayout>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent_linear_layout"
+    android:padding="@dimen/activity_margin"
+    tools:context=".CalendarActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/list_notif_label"
+            android:textStyle="bold"
+            android:textSize="@dimen/label_text_size"
+            android:paddingTop="@dimen/other_margin_sizes"
+            android:paddingBottom="@dimen/other_margin_sizes"
+            android:textColor="@color/teal_200"
+            android:layout_weight="1"
+            />
+
+     <Button
+         android:id="@+id/button_delete_from_main"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/delete_button"
+         android:textAllCaps="false"
+         android:padding="1dp"
+         android:clickable="true"
+         android:focusable="true"
+        />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_label_main"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/teal_200"
+                android:layout_weight="2"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_date_label_main"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/teal_200"
+                android:layout_weight="1.5"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/due_date_title_main"
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:textColor="@color/teal_200"
+                android:layout_weight="1.5"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:paddingTop="@dimen/other_margin_sizes"
+                android:paddingBottom="@dimen/other_margin_sizes"
+                android:textColor="@color/teal_200"
+                android:layout_weight="0"
+
+
+                />
+        </LinearLayout>
+
+
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:paddingTop="5dp"
+        android:paddingBottom="30dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/display_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
+            android:scrollbars="vertical"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="3dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/ic_baseline_black_add_24"
+        app:tint="@color/white"
+        android:scaleType="center"
+        app:backgroundTint="@color/teal_700"
+        app:rippleColor="@color/white"/>
+
+<!--
+    <Button
+        android:id="@+id/button_delete_from_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_button"
+        android:textSize="@dimen/button_text_size"
+        android:textAllCaps="false"
+        android:padding="1dp"
+        />
+-->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

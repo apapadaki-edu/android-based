@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- File for all string values used in the app for english lang local settings-->
+
+<resources>
+    <string name="app_name">Remainder Application</string>
+
+    <string name="list_notif_label">Active Remainders</string>
+
+    <string name="no_entries">Everything is done!</string>
+
+    <string name="title_label">Enter remainder title:</string>
+    <string name="title_label_main">Title</string>
+    <string name="title_input_hint">Title...</string>
+    <string name="due_date_title_main">Due Date</string>
+    <string name="due_date_title">Enter due date for the remainder:</string>
+    <string name="due_date_input_hint">DD/MM/YYYY or DD/MM/YYYY hh:mm:ss</string>
+    <string name="details_label">Enter notification description:</string>
+    <string name="details_input_hint">Description goes here...</string>
+
+    <string name="save_button">Save</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="new_button">New</string>
+
+
+    <string name="title">Title...</string>
+    <string name="due_date">dd/MM/yyyy hh:mm:ss</string>
+    <string name="create_date">dd/MM/yyyy hh:mm:ss</string>
+    <string name="second_activity_name">Create/Edit Remainder</string>
+    <string name="empty_db_message">No event or remainders</string>
+    <string name="empty_fields" translatable="false">"Please add title and due date"</string>
+    <string name="create_date_label_main">Create Date</string>
+
+</resources>

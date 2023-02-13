@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- File for all string values used in the app for greek lang local settings-->
+
+<resources>
+    <string name="app_name">Υπενθυμίσεις</string>
+
+    <string name="list_notif_label">Ενεργά συμβαντα</string>
+
+    <string name="no_entries">Τίποτα νέο.</string>
+
+    <string name="title_label">Πληκτρολόγησε τίτλο:</string>
+    <string name="title_label_main">Title</string>
+    <string name="title_input_hint">Τίτλος...</string>
+    <string name="due_date_title_main">Ημ/νια Πραγμ/σης</string>
+    <string name="due_date_title">Πληκτρολόγησε ημερομηνία πραγματοποίησης συμβάντος:</string>
+    <string name="due_date_input_hint">ΗΗ/MM/ΕΕΕΕ ή HH/MM/EEEE HH:mm:ss</string>
+    <string name="details_label">Πληκτρολόγησε την περιγραφή:</string>
+    <string name="details_input_hint">Περιγραφή...</string>
+
+    <string name="save_button">Αποθήκευση</string>
+    <string name="delete_button">Διαγραφή</string>
+    <string name="cancel_button">Πίσω</string>
+    <string name="new_button">Νέο</string>
+
+    <string name="title">Τίτλος...</string>
+    <string name="due_date">12/01/2022</string>
+    <string name="create_date">01/04/22</string>
+    <string name="second_activity_name">Νέα Υπενθύμιση</string>
+    <string name="empty_db_message">Τίποτα προγραμματισμένο</string>
+    <string name="empty_fields" translatable="false">"Πρόσθεσε τίτλο και ημερομηνία"</string>
+    <string name="create_date_label_main">Ημ/νια Δημιουργίας</string>
+
+
+</resources>
