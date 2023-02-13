@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- File for all string values used in the app for greek lang local settings-->
+
+<resources>
+    <string name="app_name">Εφαρμογή Μηνυμάτων</string>
+    <string name="address_field_label">Πληκτρολογήστε αριθμό ή διεύθυνση e-mail:</string>
+    <string name="subject_field_label">Πληκτρολογήστε θέμα e-mail:</string>
+    <string name="body_label">Πληκτρολoγήστε το μήνυμά σας:</string>
+
+    <string name="address_field_placeholder">αριθμός/e-mail...</string>
+    <string name="body_placeholder">Μήνυμα...</string>
+    <string name="contact_field_placeholder">Θεμα...</string>
+
+    <string name="button_sms_text">Αποστολή SMS</string>
+    <string name="button_email_text">Αποστολή Email</string>
+    <string name="button_clear_text">Καθαρισμός</string>
+
+    <string name="invalid_phone_number_toast">Μη έγκυρος αριθμός τηλεφώνου</string>
+    <string name="invalid_email_toast">Μη έγκυρη διεύθυνση E-mail</string>
+
+    <string name="email_app_chooser_prompt">Επιλέξτε εφαρμογή:</string>
+
+</resources>
