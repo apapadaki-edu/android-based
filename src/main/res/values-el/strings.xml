@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- File for all string values used in the app for greek lang local settings-->
+
+<resources>
+    <string name="app_name">Επιστημονική Αριθμομηχανή</string>
+    <string name="parameters_label">Παράμετροι:</string>
+    <string name="functions_label">Συναρτήσεις:</string>
+    <string name="results_label">Αποτελέσματα:</string>
+    <string name="parameters_field">Αρ.1, Αρ.2,...</string>
+    <string name="factorial">Παραγωντικό</string>
+    <string name="gcd">ΜΚΔ</string>
+    <string name="fibonacci">Fibonacci</string>
+    <string name="clear">Eκκαθάριση</string>
+    <string name="results">Αποτελέσματα...</string>
+    <string name="invalid_input_message">Πληκτρολογήστε ακεραίους διαχωρισμένους με κόμμα.</string>
+
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- File for all string values used in the app for english lang local settings-->
+
+<resources>
+    <string name="app_name">Scientific Calculator</string>
+    <string name="parameters_label">Enter parameters:</string>
+    <string name="functions_label">Choose function/s:</string>
+    <string name="results_label">Results:</string>
+    <string name="parameters_field">num 1, num 2, ...</string>
+    <string name="factorial">Factorial</string>
+    <string name="gcd">GCD</string>
+    <string name="fibonacci">Fibonacci</string>
+    <string name="clear">Clear</string>
+    <string name="results">Results...</string>
+    <string name="invalid_input_message">Not a valid sequence of numbers. Please enter integers separated by commas.</string>
+</resources>

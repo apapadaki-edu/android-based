@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent_linear_layout"
+    android:padding="@dimen/activity_margin"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/parameters_label"
+        android:textSize="@dimen/label_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/teal_200"
+        />
+
+    <EditText
+        android:id="@+id/parameters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/parameters_field"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:layout_gravity="top"
+        android:textSize="@dimen/edit_text_size"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/functions_label"
+        android:textStyle="bold"
+        android:textSize="@dimen/label_text_size"
+        android:paddingTop="10dp"
+        android:textColor="@color/teal_200"
+        />
+
+    <!--Needs to add the following in the build.gradle dependencies section
+            implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    and migration to AndroidX-->
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        app:justifyContent="space_around">
+
+        <Button
+            android:id="@+id/button_factorial"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/factorial"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="5dp"
+            />
+
+        <Button
+            android:id="@+id/button_gcd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/gcd"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="1dp"
+            />
+
+        <Button
+            android:id="@+id/button_fibonacci"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/fibonacci"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="1dp"
+            />
+
+        <Button
+            android:id="@+id/button_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/clear"
+            android:textSize="@dimen/button_text_size"
+            android:textAllCaps="false"
+            android:padding="5dp"
+            />
+    </com.google.android.flexbox.FlexboxLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/results_label"
+        android:textSize="@dimen/label_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/teal_200"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/display_results"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="@string/results"
+            android:textSize="@dimen/label_text_size"
+            android:layout_gravity="fill_horizontal"
+            android:textColor="@color/teal_200"
+            android:paddingTop="10dp"
+            android:scrollbars="vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = ""
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
