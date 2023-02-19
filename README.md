@@ -6,6 +6,7 @@ Native android applications
     [[resources](../../tree/contact-methods/contact/src/main/res)] (like xml)
 
 ## [Calculator](../../tree/calculator)
+  A calculator for the factorial, the fibonacci sequence up to a number and the greater common divisor.<br>
     [[java code](../../tree/calculator/src/main/java/com/example/myapplication)] 
     [[resources](../../tree/calculator/src/main/res)]
 
