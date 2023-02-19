@@ -6,8 +6,8 @@ Native android applications
     * [resources (like xml)](../../tree/contact-methods/contact/src/main/res)
 
 2. [Calculator](../../tree/calculator)
-    * [java code](../../tree/calculator/calculator/src/main/java/com/example/myapplication)
-    * [resources (like xml)](../../tree/calculator/calculator/src/main/res)
+    * [java code](../../tree/calculator/src/main/java/com/example/myapplication)
+    * [resources (like xml)](../../tree/calculator/src/main/res)
 
 3. [Event Manager](../../tree/calendar)
     * [java code](../../tree/calendar/calendar/src/main/java/com/example/myapplication)
