@@ -17,8 +17,6 @@ package com.example.myapplication;
  * Event/Remainder class (CalendarEvent.java) a class to represent the events for better access.
  * Not much happen in that file...
  *
- * !..Initially the database transactions were handled within threads. However, because Davey! appeared
- * on the logs whether threads were used or not, I chose not to use them.
  */
 
 
