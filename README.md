@@ -14,12 +14,12 @@ Native android applications
     * [resources (like xml)](../../tree/calendar/calendar/src/main/res)
 
 4. [Photo Gallery](../../tree/photo-gallery)
-    * [java code](../../tree/photo-gallery/src/main/java/com/example/myapplication)
-    * [resources (like xml)](../../tree/photo-gallery/src/main/res)
+    * [java code](../../tree/photo-gallery/photogallery/src/main/java/com/example/myapplication)
+    * [resources (like xml)](../../tree/photo-gallery/photogallery/src/main/res)
 
 5. [Maps](../../tree/maps-app)
-    * [java code](../../tree/maps-app/src/main/java/com/example/myapplication)
-    * [resources (like xml)](../../tree/maps-app/src/main/res)
+    * [java code](../../tree/maps-app/maps/src/main/java/com/example/myapplication)
+    * [resources (like xml)](../../tree/maps-app/maps/src/main/res)
 
 
 
