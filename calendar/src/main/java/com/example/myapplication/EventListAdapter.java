@@ -25,6 +25,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.EventViewHolder>{
@@ -129,38 +132,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     @Override
     public void onBindViewHolder(@NonNull EventListAdapter.EventViewHolder holder, int position)
     {
-        // event returned from select query
-        CalendarEvent curEvent = db.select(position);
+        new RetrieveEventTask().execute(position, holder);
 
-        // set item view's id to record's position in the dataset
-        holder.eventItemView.setId(position);
-
-        // if a record was found and retrieved, then set record to item vies children
-        if (curEvent != null)
-        {
-
-            TextView title = (TextView) holder.eventItemView.getChildAt(0);
-            title.setText(curEvent.getTitle());
-
-            TextView createDate = (TextView) holder.eventItemView.getChildAt(1);
-            createDate.setText(curEvent.getCreateDateFormatted());
-
-            TextView dueDate = (TextView) holder.eventItemView.getChildAt(2);
-            dueDate.setText(curEvent.getDueDateFormatted());
-
-            TextView details = (TextView) holder.eventItemView.getChildAt(3);
-            details.setText(String.valueOf(curEvent.getDetails()));
-
-
-            CheckBox checkBox = (CheckBox) holder.eventItemView.getChildAt(4);
-            checkBox.setChecked(false); // first uncheck to cancel previous state
-
-            // bind holder's onCheck method to each view's checkbox
-            checkBox.setOnClickListener((view)-> holder.onCheck(view, curEvent.getCreateDate(), position));
-
-            // set item view's tag to the record, as it was retrieved from the database
-            holder.eventItemView.setTag(curEvent);
-        }
      }
 
      // returns the number of records returned by the select query
@@ -177,5 +150,52 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
         void isChecked(boolean checkState, long id, int position);
     }
 
+    //class for retrieving the calendar event from the database (threading)
+    private class RetrieveEventTask extends AsyncTask<Object, Integer, CalendarEvent>{
+
+        private EventListAdapter.EventViewHolder holder;
+        private int position;
+
+        @Override
+        protected CalendarEvent doInBackground(Object... params) {
+            // event returned from select query
+            holder = (EventListAdapter.EventViewHolder) params[1];
+            position = (Integer) params[0];
+            return db.select((Integer)params[0]);
+        }
+
+        protected void onPostExecute(CalendarEvent curEvent){
+
+            // set item view's id to record's position in the dataset
+            holder.eventItemView.setId(position);
+
+            // if a record was found and retrieved, then set record to item views children
+            if (curEvent != null)
+            {
+
+                TextView title = (TextView) holder.eventItemView.getChildAt(0);
+                title.setText(curEvent.getTitle());
+
+                TextView createDate = (TextView) holder.eventItemView.getChildAt(1);
+                createDate.setText(curEvent.getCreateDateFormatted());
+
+                TextView dueDate = (TextView) holder.eventItemView.getChildAt(2);
+                dueDate.setText(curEvent.getDueDateFormatted());
+
+                TextView details = (TextView) holder.eventItemView.getChildAt(3);
+                details.setText(String.valueOf(curEvent.getDetails()));
+
+
+                CheckBox checkBox = (CheckBox) holder.eventItemView.getChildAt(4);
+                checkBox.setChecked(false); // first uncheck to cancel previous state
+
+                // bind holder's onCheck method to each view's checkbox
+                checkBox.setOnClickListener((view)-> holder.onCheck(view, curEvent.getCreateDate(), position));
+
+                // set item view's tag to the record, as it was retrieved from the database
+                holder.eventItemView.setTag(curEvent);
+            }
+        }
+    }
 
 }
