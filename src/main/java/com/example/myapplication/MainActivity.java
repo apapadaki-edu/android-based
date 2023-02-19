@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /*
-     * Functions for calculation of Factorial, Fibonacci and greater common denominator
+     * Functions for calculation of Factorial, Fibonacci and greater common divisor
      *
      * Some notes:
      * For the concatenation of the results, there was the use of a String Builder
