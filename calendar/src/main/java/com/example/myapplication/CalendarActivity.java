@@ -37,8 +37,12 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 
 public class CalendarActivity extends AppCompatActivity
@@ -89,25 +93,24 @@ public class CalendarActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 // loop over all checked events if any and delete them from the database
-                if(!checkedEvents.isEmpty())
-                {
-                    for (int i : checkedEvents.keySet())
-                    {
-                        try
-                        {
-                            db.deleteEvent(checkedEvents.remove(i));
-                        }
-                        catch (NullPointerException e)
-                        {
-                            Log.i("DELETE ITEM ERROR", e.getMessage());
-                            return;
-                        }
+                if(checkedEvents.isEmpty()) return;
 
+                Iterator it = checkedEvents.entrySet().iterator();
+                while(it.hasNext()){
+                    Map.Entry event = (Map.Entry) it.next();
+                    try {
+                        db.deleteEvent((long) event.getValue());
+                        it.remove();
+                    }catch (NullPointerException e){
+
+                        Log.i("DELETE ITEM ERROR", e.getMessage());
+                        return;
                     }
-                    //inform recyclerView adapter of the data changes to update the UI
-                    adapter.notifyDataSetChanged();
                 }
+                //inform recyclerView adapter of the data changes to update the UI
+                adapter.notifyDataSetChanged();
             }
+
         });
 
 
@@ -221,7 +224,6 @@ public class CalendarActivity extends AppCompatActivity
     @Override
     public void isChecked(boolean checkState, long id, int position)
     {
-
         if(checkState)
         {
             // event checked add in cache its id
