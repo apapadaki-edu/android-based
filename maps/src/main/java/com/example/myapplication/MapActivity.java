@@ -125,13 +125,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 Location l = mCurLocation;
-                Log.i("CurLoc", l.toString());
                 Bundle args = new Bundle();
                 args.putDouble("lat", l.getLatitude());
                 args.putDouble("long", l.getLongitude());
                 LoaderManager.getInstance(MapActivity.this)
                         .initLoader(0, args, MapActivity.this);
-                Log.i("InSave", "inSave");
             }
         });
         // *** IMPORTANT ***
@@ -255,7 +253,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
-            Log.i("MapActivity", "Displaying permission rationale to provide additional context.");
 
             showSnackbar(R.string.permission_rationale, android.R.string.ok,
                     new View.OnClickListener() {
@@ -287,7 +284,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.i("SecondMapsActivity", "onRequestPermissionResult");
+
         if (requestCode == 1) {
             if (grantResults.length <= 0) {
                 // If user interaction was interrupted, the permission request is cancelled and you
@@ -408,7 +405,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onLoadFinished(@NonNull Loader<Bundle> loader, Bundle data) {
         if(data!=null) {
             addCheckpoint(data);
-            Log.i("outOfThread", "");
         }
     }
 
@@ -423,7 +419,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String title;
         String snippet;
 
-        Log.i("InRETRIEVE", "");
         String URL = "content://com.example.myapplication.CheckPointContentProvider";
         Uri checkpoints = Uri.parse(URL);
         Cursor c = managedQuery(checkpoints, null, null, null, "_ID DESC");
@@ -451,7 +446,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void addCheckpoint(Bundle checkpoint){
         ContentValues values = new ContentValues();
 
-        Log.i("inAdd", "inAdd");
         values.put(CheckPointContentProvider.lat, checkpoint.getDouble("lat"));
         values.put(CheckPointContentProvider.lon, checkpoint.getDouble("long"));
         values.put(CheckPointContentProvider.address, checkpoint.getString("address"));
