@@ -26,7 +26,7 @@ Messaging App. User provides email address/phone number, title in the first case
 <br>
 
 5. [Maps](../../tree/maps-app)<br>
-    Adding and managing location pins on a map.<br>
+    Location tracking. Adding and managing location pins on a map.<br>
     [[java code](../../tree/maps-app/maps/src/main/java/com/example/myapplication)]
     [[resources](../../tree/maps-app/maps/src/main/res)]
 <br>
