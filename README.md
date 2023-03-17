@@ -29,11 +29,12 @@ Messaging App. User provides email address/phone number, title in the first case
     Location tracking. Adding and managing location pins on a map.<br>
     [[java code](../../tree/maps-app/maps/src/main/java/com/example/myapplication)]
     [[resources](../../tree/maps-app/maps/src/main/res)]
-<br>
+
 
 <br><br>
 Currently, most projects are getting updated, with both improving code (from the semester initially developed) and adding more features.
 
+<br>
 I would be extremely grateful for any feedback or tips on how to improve or change these projects. It would help immensely my development as a programmer. 
 
 
