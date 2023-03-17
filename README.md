@@ -1,5 +1,5 @@
 # android-based
-Native android applications<br>
+Native android applications (each on a different branch)<br>
 
 1. [Contact](../../tree/contact-methods)<br>
 Messaging App. User provides email address/phone number, title in the first case and body, then selects which app to open with that information (either their mailing or messaging app)<br>
