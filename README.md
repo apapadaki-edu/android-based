@@ -31,6 +31,6 @@ Messaging App. User provides email address/phone number, title in the first case
     [[resources](../../tree/maps-app/maps/src/main/res)]
 <br>
 
-
+**--INPORTANT:-- Currently, most projects are getting updated, with both improving code (from the semester initially developed) and adding more features.**
 
 
