@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
-
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,6 +23,7 @@ import android.os.Environment;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
@@ -38,11 +37,13 @@ import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+
 
 public class ImageGallery extends AppCompatActivity {
 
@@ -62,12 +64,44 @@ public class ImageGallery extends AppCompatActivity {
 
     private static String curImageTime;
     private static String curImageLocation;
+
     Button takePhoto;
-    Location mCurLocation;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private int LOAD_IMAGE_REQUEST = 299;
+
     FlexboxLayout parent;
     LayoutInflater inflater;
+    //added
+    /**
+     * Contains parameters used by {@link com.google.android.gms.location.FusedLocationProviderApi}.
+     */
+    private LocationRequest mLocationRequest;
+
+    /**
+     * Provides access to the Fused Location Provider API.
+     */
+    private FusedLocationProviderClient mFusedLocationClient; // will keep
+
+    /**
+     * Callback for changes in location.
+     */
+    private LocationCallback mLocationCallback;
+    /**
+     * The current location.
+     */
+    private Location mLocation;
+
+    /**
+     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
+     */
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 2000;
+
+    /**
+     * The fastest rate for active location updates. Updates will never be more frequent
+     * than this value.
+     */
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
+            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+    //added end
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,38 +110,40 @@ public class ImageGallery extends AppCompatActivity {
 
         takePhoto = (Button) findViewById(R.id.take_photo);
 
-        takePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!checkPermissions(Manifest.permission.CAMERA)) {
-                    requestPermissions(Manifest.permission.CAMERA, MY_PERMISSION_CAMERA,
-                            R.string.permission_rationale_camera);
-                }
-                dispatchTakePictureIntent();
+        takePhoto.setOnClickListener(view -> {
+            if (!checkPermissions(Manifest.permission.CAMERA)) {
+                requestPermissions(Manifest.permission.CAMERA, MY_PERMISSION_CAMERA,
+                        R.string.permission_rationale_camera);
             }
+            dispatchTakePictureIntent();
         });
 
 
-        LocationRequest locationRequest;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(0);
-        locationRequest.setFastestInterval(0);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest = LocationRequest.create().setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setInterval(UPDATE_INTERVAL_IN_MILLISECONDS).setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                //TODO:check if the commented line changes anything when uncommented
+                //super.onLocationResult(locationResult);
+                mLocation = locationResult.getLastLocation();
+                Log.i("locSuccess", (mLocation==null)?"No Location Found": mLocation.toString());
+            }
+        };
 
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         parent = (FlexboxLayout) findViewById(R.id.gallery);
 
-        // Get all stored image files and display them in main
-        //retrieveImageUris();
         new UpdateUI(this).execute();
 
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
-
         if (!checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION)) {
             requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION, MY_PERMISSION_LOCATION,
                     R.string.permission_rationale_location);
@@ -119,21 +155,37 @@ public class ImageGallery extends AppCompatActivity {
         }
 
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
+        if (!checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION, MY_PERMISSION_LOCATION,
+                    R.string.permission_rationale_location);
+        }
+        getLastLocation();
         new UpdateUI(this).execute();
     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //Bitmap image = (Bitmap) data.getExtras().get("data"); //thumbnail only
-            Bitmap takerImage = BitmapFactory.decodeFile(curImageLocation);
+            // Bitmap image = (Bitmap) data.getExtras().get("data"); //thumbnail only
+            // Bitmap takerImage = BitmapFactory.decodeFile(curImageLocation);
             galleryAddPic();
             Bundle image = new Bundle();
             image.putString(ImageContentProvider.imageUri, curImageLocation);
-            image.putString(ImageContentProvider.location, getLocation());
+            image.putString(ImageContentProvider.location, (mLocation == null)? " ":Double.toString(mLocation.getLatitude())
+                    + ',' + mLocation.getLongitude());
             image.putString(ImageContentProvider.date, curImageTime);
             image.putString(ImageContentProvider.comment, "");
             // Insert image in db
@@ -149,6 +201,7 @@ public class ImageGallery extends AppCompatActivity {
         return permissionCode == PackageManager.PERMISSION_GRANTED;
     }
 
+
     private void requestPermissions(String permission, int mRequestCode, int snackBarStringResourceId) {
         boolean shouldProvideRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -160,14 +213,11 @@ public class ImageGallery extends AppCompatActivity {
             Log.i("ImageGallery", "Displaying permission rationale to provide additional context.");
 
             showSnackbar(snackBarStringResourceId, android.R.string.ok,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Request permission
-                            ActivityCompat.requestPermissions(ImageGallery.this,
-                                    new String[]{permission},
-                                    mRequestCode);
-                        }
+                    view -> {
+                        // Request permission
+                        ActivityCompat.requestPermissions(ImageGallery.this,
+                                new String[]{permission},
+                                mRequestCode);
                     });
 
         } else {
@@ -181,23 +231,22 @@ public class ImageGallery extends AppCompatActivity {
         }
     }
 
+
     private void onPermissionDenied() {
         showSnackbar(R.string.permission_denied_explanation, R.string.settings,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Build intent that displays the App settings screen.
-                        Intent intent = new Intent();
-                        intent.setAction(
-                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package",
-                                BuildConfig.APPLICATION_ID, null);
-                        intent.setData(uri);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
+                view -> {
+                    // Build intent that displays the App settings screen.
+                    Intent intent = new Intent();
+                    intent.setAction(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package",
+                            BuildConfig.APPLICATION_ID, null);
+                    intent.setData(uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 });
     }
+
 
     /**
      * Callback received when a permissions request has been completed.
@@ -217,7 +266,7 @@ public class ImageGallery extends AppCompatActivity {
                     Log.i("ImageGallery", "User interaction was cancelled.");
                 } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted.
-
+                    getLastLocation();
                     //TODO: CHECK IF I WILL KEEP THIS
 
                 } else {
@@ -257,6 +306,7 @@ public class ImageGallery extends AppCompatActivity {
         }
     }
 
+
     /**
      * Shows a {@link Snackbar}.
      *
@@ -267,8 +317,8 @@ public class ImageGallery extends AppCompatActivity {
     private void showSnackbar(final int mainTextStringId, final int actionStringId,
                               View.OnClickListener listener) {
         Snackbar.make(findViewById(android.R.id.content),
-                getString(mainTextStringId),
-                Snackbar.LENGTH_INDEFINITE)
+                        getString(mainTextStringId),
+                        Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(actionStringId), listener).show();
     }
 
@@ -279,26 +329,27 @@ public class ImageGallery extends AppCompatActivity {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         //if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
+        // Create the File where the photo should go
 
-            File photoFile = null;
-            try {
-                photoFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                Log.e("ImageGallery", ex.getMessage());
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-       //}
+        File photoFile = null;
+        try {
+            photoFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+        } catch (IOException ex) {
+            // Error occurred while creating the File
+            Log.e("ImageGallery", ex.getMessage());
+        }
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+            Uri photoURI = FileProvider.getUriForFile(Objects.requireNonNull(getApplicationContext()),
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+        //}
 
     }
+
 
     /**
      * Create a File for saving an image or video
@@ -380,66 +431,6 @@ public class ImageGallery extends AppCompatActivity {
 
     }
 
-    @SuppressLint("MissingPermission")
-    public void updateLocation(){
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                mCurLocation = location;
-            }
-        });
-    }
-
-    public String getLocation(){
-        String replyL = "";
-        updateLocation();
-        if (mCurLocation != null){
-            replyL += mCurLocation.getLongitude() + ", " + mCurLocation.getLongitude();
-        }
-        return replyL;
-    }
-
-    private Bitmap setPic(String imageFile) throws FileNotFoundException{
-
-        // Get the dimensions of the View
-        //TODO: define as arguments
-        Display display = getWindowManager().getDefaultDisplay();
-        int widthP = display.getWidth() - (2 * (int) getResources().getDimension(R.dimen.activity_margin)) - 20;
-        int dim = widthP/5;
-
-
-            // Get the dimensions of the bitmap
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-
-            BitmapFactory.decodeFile(imageFile, bmOptions);
-
-            int photoW = bmOptions.outWidth;
-            int photoH = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int scaleFactor = Math.max(1, Math.min(photoW / dim, photoH / dim));
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
-            return bitmap;
-    }
-
-    public ImageView createUIThumb(){
-        View eventItemView = inflater.inflate(R.layout.image_thumb, null, false);
-        int id = View.generateViewId();
-        eventItemView.setId(id);
-        parent.addView(eventItemView);
-        LinearLayout  imageParent = (LinearLayout) findViewById(id);
-        ImageView imageView = (ImageView) imageParent.getChildAt(0);
-        return imageView;
-    }
-
-
 
     private class UpdateUI extends AsyncTask<int[], Integer, Integer> {
         private ArrayList<Bundle> imagesArray = new ArrayList<>();
@@ -452,16 +443,14 @@ public class ImageGallery extends AppCompatActivity {
 
         @SuppressLint("Range")
         protected Integer doInBackground(int[]... ints) {
-            Log.i("threading: ", "in do in background");
-            Log.i("threading: ", "in Runnable run");
             ArrayList<Bundle> imagesRetrieved = new ArrayList<>();
             ArrayList<Bitmap> bitmapsRetrieved = new ArrayList<>();
             Bundle image = new Bundle();
 
             String URL = "content://com.example.myapplication.ImageContentProvider";
             Uri images = Uri.parse(URL);
-            //Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            //startActivityForResult(i, LOAD_IMAGE_REQUEST);
+            // Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            //  startActivityForResult(i, LOAD_IMAGE_REQUEST);
 
             Cursor c = managedQuery(images, null, null, null, null);
             if(c.moveToFirst()){
@@ -506,4 +495,72 @@ public class ImageGallery extends AppCompatActivity {
         }
     }
 
+
+    private Bitmap setPic(String imageFile) throws FileNotFoundException{
+
+        // Get the dimensions of the View
+        //TODO: define as arguments
+        Display display = getWindowManager().getDefaultDisplay();
+        int widthP = display.getWidth() - (2 * (int) getResources().getDimension(R.dimen.activity_margin)) - 20;
+        int dim = widthP/5;
+
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(imageFile, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW / dim, photoH / dim));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile, bmOptions);
+        return bitmap;
+    }
+
+
+    public ImageView createUIThumb(){
+        View eventItemView = inflater.inflate(R.layout.image_thumb, null, false);
+        int id = View.generateViewId();
+        eventItemView.setId(id);
+        parent.addView(eventItemView);
+        LinearLayout  imageParent = (LinearLayout) findViewById(id);
+        ImageView imageView = (ImageView) imageParent.getChildAt(0);
+        return imageView;
+    }
+
+
+    private void getLastLocation() {
+        try {
+            mFusedLocationClient.getLastLocation()
+                    .addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (!task.isSuccessful() || task.getResult() == null) {
+                                Log.w("LocPer", "Failed to get location.");
+                                //Makes a request for location updates. Note that in this sample we merely log the
+                                try {
+                                    mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                                            mLocationCallback, Looper.getMainLooper());
+                                } catch (SecurityException unlikely) {
+                                    Log.e("LocPer", "Lost location permission. Could not request updates. " + unlikely);
+                                }
+                            } else {
+                                mLocation = task.getResult();
+                                Log.i("locSuccess", mLocation.toString());
+                            }
+                        }
+                    });
+        } catch (SecurityException unlikely) {
+            Log.e("LocPer", "Lost location permission." + unlikely);
+        }
+    }
 }

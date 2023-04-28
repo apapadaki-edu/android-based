@@ -49,6 +49,8 @@ public class SingleImageActivity extends AppCompatActivity{
         time.setText(data.getString("date"));
         location = (TextView) findViewById(R.id.location);
         location.setText(data.getString("location"));
+        Log.i("LocationFromUi", data.getString("location"));
+
         comment = (EditText) findViewById(R.id.comment);
         comment.setText(data.getString("comment"));
         Log.i("from ui",  data.getString("comment"));
