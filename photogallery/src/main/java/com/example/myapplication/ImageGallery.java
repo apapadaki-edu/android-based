@@ -164,6 +164,10 @@ public class ImageGallery extends AppCompatActivity {
             requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION, MY_PERMISSION_LOCATION,
                     R.string.permission_rationale_location);
         }
+        if (!checkPermissions(Manifest.permission.CAMERA)) {
+            requestPermissions(Manifest.permission.CAMERA, MY_PERMISSION_CAMERA,
+                    R.string.permission_rationale_camera);
+        }
         getLastLocation();
         new UpdateUI(this).execute();
     }
@@ -443,10 +447,7 @@ public class ImageGallery extends AppCompatActivity {
 
         @SuppressLint("Range")
         protected Integer doInBackground(int[]... ints) {
-            ArrayList<Bundle> imagesRetrieved = new ArrayList<>();
-            ArrayList<Bitmap> bitmapsRetrieved = new ArrayList<>();
-            Bundle image = new Bundle();
-
+            Bundle image;
             String URL = "content://com.example.myapplication.ImageContentProvider";
             Uri images = Uri.parse(URL);
             // Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -455,24 +456,28 @@ public class ImageGallery extends AppCompatActivity {
             Cursor c = managedQuery(images, null, null, null, null);
             if(c.moveToFirst()){
                 do {
+                    image = new Bundle();
                     image.putString("id", c.getString(c.getColumnIndex(ImageContentProvider._ID)));
                     image.putString("uri",c.getString(c.getColumnIndex(ImageContentProvider.imageUri)));
                     image.putString("location", c.getString(c.getColumnIndex(ImageContentProvider.location)));
                     image.putString("date", c.getString(c.getColumnIndex(ImageContentProvider.date)));
                     image.putString("comment", c.getString(c.getColumnIndex(ImageContentProvider.comment + "")));
-                    imagesRetrieved.add(image);
+                    imagesArray.add(image);
 
                     try {
-                        bitmapsRetrieved.add(setPic(c.getString(c.getColumnIndex(ImageContentProvider.imageUri))));
+                        bitmaps.add(setPic(c.getString(c.getColumnIndex(ImageContentProvider.imageUri))));
 
                     } catch (FileNotFoundException ex) {
-                        bitmapsRetrieved.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.no_image));
+                        bitmaps.add(BitmapFactory.decodeResource(activity.getResources(), R.drawable.no_image));
                     }
+
                 } while (c.moveToNext());
 
-                imagesArray = imagesRetrieved;
-                bitmaps = bitmapsRetrieved;
+
+                //imagesArray = imagesRetrieved;
+                //bitmaps = bitmapsRetrieved;
             }
+
             return imagesArray.size();
         }
 
