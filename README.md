@@ -5,6 +5,7 @@ Location tracking. Adding and managing location pins on a map.<br>
 [[resources](../../tree/maps-app/maps/src/main/res)]
 
 
+
 #### Specifications 
 
 | Software | Version |
